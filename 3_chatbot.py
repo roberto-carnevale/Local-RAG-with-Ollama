@@ -69,7 +69,7 @@ For every piece of information you provide, also provide the source.
 Return text as follows:
 
 <Answer to the question>
-Source: source_url  
+Source: source_url
 """)
 
 
