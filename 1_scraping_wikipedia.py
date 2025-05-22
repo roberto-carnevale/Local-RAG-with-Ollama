@@ -96,11 +96,13 @@ else:
 ###############################   IF ALL WEBSITES ARE READY, FETCH DATA AND WRITE TO FILES   ######################################################################
 
     if snapshot_ready:
-        print("== > All websites are ready - start writing data to datasets directory")
+        print("== > All articles are ready - start writing data to datasets directory")
 
 
         response = requests.get('https://api.brightdata.com/datasets/v3/snapshot/'+snapshot_id, headers=headers)
 
+        if not os.path.exists(os.getenv("DATASET_STORAGE_FOLDER")):
+             os.makedirs(os.getenv("DATASET_STORAGE_FOLDER"))
 
         with open(os.getenv("DATASET_STORAGE_FOLDER")+"data.txt", "wb") as f:
             f.write(response.content)

@@ -73,6 +73,8 @@ file_content = process_json_lines(os.getenv("DATASET_STORAGE_FOLDER")+"data.txt"
 
 for line in file_content:
 
+    print(line['url'])
+
     texts = []
     texts = text_splitter.create_documents([line['raw_text']],metadatas=[{"source":line['url'], "title":line['title']}])
 
