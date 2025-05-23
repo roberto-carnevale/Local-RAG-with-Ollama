@@ -17,7 +17,7 @@
 <h3>1. Clone the repository:</h3>
 
 ```
-git clone https://github.com/ThomasJanssen-tech/Streamlit-Tutorial.git
+git clone https://github.com/ThomasJanssen-tech/Local-RAG-with-Ollama
 cd Local-RAG-With-Ollama
 ```
 
@@ -40,8 +40,9 @@ venv\Scripts\Activate
 pip install -r requirements.txt
 ```
 
-<h3>5. Add OpenAI API Key</h3>
+<h3>5. Add Bright Data API Key</h3>
 <ul>
+<li>Get your $15 Bright Data credits: https://brdta.com/tomstechacademy</li>
 <li>Rename the .env.example file to .env</li>
 <li>Add your Bright Data API key</li>
 <li><i>If you want to use ChatGPT or Anthropic models, add an API key (not required for Ollama)</i></li>
