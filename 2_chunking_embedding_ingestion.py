@@ -19,7 +19,7 @@ load_dotenv()
 ###############################   INITIALIZE EMBEDDINGS MODEL  #################################################################################################
 
 embeddings = OllamaEmbeddings(
-    model=os.getenv("EMBEDDING_MODEL"),
+    model="mxbai-embed-large:335m",
 )
 
 ###############################   DELETE CHROMA DB IF EXISTS AND INITIALIZE   ##################################################################################
@@ -64,20 +64,21 @@ def process_json_lines(file_path):
 
     return extracted
 
-file_content = process_json_lines(os.getenv("DATASET_STORAGE_FOLDER")+"data.txt")
-
+#file_content = process_json_lines(os.getenv("DATASET_STORAGE_FOLDER")+"data.txt")
+file_content = open(os.getenv("DATASET_STORAGE_FOLDER")+"data.txt", encoding="utf-8").readlines()
 
 #################################################################################################################################################################
 ###############################   3.  CHUNKING, EMBEDDING AND INGESTION   #######################################################################################
 ##################################################################################################################################################################
-
+line_number = 1
 for line in file_content:
 
-    print(line['url'])
+    print(line)
 
     texts = []
-    texts = text_splitter.create_documents([line['raw_text']],metadatas=[{"source":line['url'], "title":line['title']}])
-
+    #texts = text_splitter.create_documents([line['raw_text']],metadatas=[{"source":line['url'], "title":line['title']}])
+    texts = text_splitter.create_documents([line],metadatas=[{"number":line_number}])
+    line_number += 1
     uuids = [str(uuid4()) for _ in range(len(texts))]
 
     vector_store.add_documents(documents=texts, ids=uuids)

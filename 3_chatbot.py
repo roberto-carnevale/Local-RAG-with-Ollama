@@ -82,7 +82,7 @@ def retrieve(query: str):
     serialized = ""
 
     for doc in retrieved_docs:
-        serialized += f"Source: {doc.metadata['source']}\nContent: {doc.page_content}\n\n"
+        serialized += f"Source: {doc.metadata['number']}\nContent: {doc.page_content}\n\n"
 
     return serialized
 

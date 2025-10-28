@@ -2,6 +2,8 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 
 # source: https://python.langchain.com/docs/introduction/
+
+
 entire_text = """
 
 LangChain is a framework for developing applications powered by large language models (LLMs).
@@ -63,7 +65,7 @@ Introductions to all the key parts of LangChain you’ll need to know! Here you'
 For a deeper dive into LangGraph concepts, check out this page.
 
 """
-
+entire_text = open("datasets/data.txt", encoding="utf-8").read()
 
 text_splitter = RecursiveCharacterTextSplitter(
     # Set a really small chunk size, just to show.
@@ -77,4 +79,4 @@ texts = text_splitter.create_documents([entire_text])
 
 print(f"Total chunks: {len(texts)}")
 
-print(f"First chunk: {texts[0].page_content}")
+print(f"First chunk: {texts[2].page_content}")
