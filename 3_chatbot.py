@@ -6,13 +6,13 @@ from dotenv import load_dotenv
 import streamlit as st
 
 # import langchain
-from langchain.agents import AgentExecutor
+from langchain.agents import create_agent
 from langchain_chroma import Chroma
 from langchain_ollama import OllamaEmbeddings
 from langchain.chat_models import init_chat_model
 from langchain_core.messages import AIMessage, HumanMessage
-from langchain.agents import create_tool_calling_agent
-from langchain import hub
+#from langchain.agents import create_tool_calling_agent
+#from langchain import hub
 from langchain_core.prompts import PromptTemplate
 from langchain_core.tools import tool
 
@@ -46,31 +46,14 @@ llm = init_chat_model(
 
 
 # pulling prompt from hub
-prompt = PromptTemplate.from_template("""                                
+prompt = """                                
 You are a helpful assistant. You will be provided with a query and a chat history.
 Your task is to retrieve relevant information from the vector store and provide a response.
 For this you use the tool 'retrieve' to get the relevant information.
                                       
-The query is as follows:                    
-{input}
-
-The chat history is as follows:
-{chat_history}
-
 Please provide a concise and informative response based on the retrieved information.
 If you don't know the answer, say "I don't know" (and don't provide a source).
-                                      
-You can use the scratchpad to store any intermediate results or notes.
-The scratchpad is as follows:
-{agent_scratchpad}
-
-For every piece of information you provide, also provide the source.
-
-Return text as follows:
-
-<Answer to the question>
-Source: source_url
-""")
+"""
 
 
 # creating the retriever tool
@@ -90,10 +73,10 @@ def retrieve(query: str):
 tools = [retrieve]
 
 # initiating the agent
-agent = create_tool_calling_agent(llm, tools, prompt)
+agent = create_agent(model=llm, tools= tools, system_prompt=prompt)
 
 # create the agent executor
-agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
+#agent_executor = create_agent(agent=agent, tools=tools, verbose=True)
 
 # initiating streamlit app
 st.set_page_config(page_title="Agentic RAG Chatbot", page_icon="🦜")
@@ -128,10 +111,12 @@ if user_question:
 
 
     # invoking the agent
-    result = agent_executor.invoke({"input": user_question, "chat_history":st.session_state.messages})
+    result = agent.invoke({"messages":[{"role": "user", "content" : user_question}]})
 
-    ai_message = result["output"]
+    #print(result)
 
+    ai_message = result["messages"][-1].content
+    print(ai_message)
     # adding the response from the llm to the screen (and chat)
     with st.chat_message("assistant"):
         st.markdown(ai_message)
